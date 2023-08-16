@@ -1,0 +1,2 @@
+/* ? The `ExpenseDetails` component doesn't require its own CSS file. It leverages the CSS classes from
+? `ExpenseItem.css` since it's a child of `ExpenseItem`. */

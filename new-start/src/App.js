@@ -1,4 +1,4 @@
-import ExpenseItem from "./components/ExpenseItem";
+import Expenses from "./components/Expenses/Expenses";
 
 function App() {
   const expenses = [
@@ -35,17 +35,7 @@ function App() {
   return (
     <div>
       <h2>Let's get started!</h2>
-      {expenses.map((expense) => (
-        // ? The <ExpenseItem /> syntax is a self-closing tag, which is a shorthand for <ExpenseItem></ExpenseItem>. This is a common practice in React when a component doesn’t have any children.
-        // ! here we are giving the values from above to the structure for the ExpenseItem
-        <ExpenseItem
-          key={expense.id}
-          title={expense.title}
-          amount={expense.amount}
-          date={expense.date}
-          location={expense.location}
-        />
-      ))}
+      <Expenses items={expenses} />
     </div>
   );
 }
