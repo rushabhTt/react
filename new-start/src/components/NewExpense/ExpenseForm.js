@@ -40,9 +40,28 @@ const ExpenseForm = () => {
     //   return { ...prevState, enteredDate: event.target.value };
     // });
   };
+  
+  const submitHandler = (event) => {
+    event.preventDefault();
+
+    // ! if we would have used the single state
+    // const expenseData = {
+    //   title: userInput.enteredTitle,
+    //   amount: userInput.enteredAmount,
+    //   date: new Date(userInput.enteredDate),
+    // };
+    
+    const expenseData = {
+      title: enteredTitle,
+      amount: enteredAmount,
+      date: new Date(enteredDate),
+    };
+
+    console.log(expenseData);
+  };
 
   return (
-    <form>
+    <form onSubmit={submitHandler}>
       <div className="new-expense__controls">
         <div className="new-expense__control">
           <label>Title</label>
