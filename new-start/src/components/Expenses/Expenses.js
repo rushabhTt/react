@@ -6,21 +6,19 @@ import ExpensesFilter from "./ExpensesFilter";
 import "./Expenses.css";
 
 const Expenses = (props) => {
-  // const [expenses, setExpenses] = useState(props.items);
   const [filteredYear, setFilteredYear] = useState("2020");
-
-  // const deleteExpenseHandler = (id) => {
-  //   setExpenses((prevExpenses) =>
-  //     prevExpenses.filter((expense) => expense.id !== id)
-  //   );
-  // };
 
   const filterChangeHandler = (selectedYear) => {
     setFilteredYear(selectedYear);
   };
 
+  // * filteredExpenses is a new array that includes only the expenses that match the selected year.
+  const filteredExpenses = props.items.filter((expense) => {
+    return expense.date.getFullYear().toString() === filteredYear;
+  });
+
   // ! map converts one to other basically we are converting array to react
-  const expenseItems = props.items.map((expense) => {
+  const expenseItems = filteredExpenses.map((expense) => {
     console.log(expense);
     return (
       <ExpenseItem
