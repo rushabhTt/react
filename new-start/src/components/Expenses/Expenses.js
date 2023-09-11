@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Card from "../UI/Card";
-import ExpenseItem from "./ExpenseItem";
 import ExpensesFilter from "./ExpensesFilter";
+import ExpensesList from "./ExpensesList";
 
 import "./Expenses.css";
 
@@ -18,30 +18,34 @@ const Expenses = (props) => {
   });
 
   // ! map converts one to other basically we are converting array to react
-  const expenseItems = filteredExpenses.map((expense) => {
-    console.log(expense);
-    return (
-      <ExpenseItem
-        // * The key prop is a unique identifier for an element in a list, but it is not passed down to the child component.
-        key={expense.id}
-        id={expense.id}
-        title={expense.title}
-        amount={expense.amount}
-        date={expense.date}
-        location={expense.location}
-        onDelete={props.onDelete}
-      />
-    );
-  });
+  // const expenseItems = filteredExpenses.map((expense) => {
+  //   console.log(expense);
+  //   return (
+  //     <ExpenseItem
+  // * The key prop is a unique identifier for an element in a list, but it is not passed down to the child component.
+  //       key={expense.id}
+  //       id={expense.id}
+  //       title={expense.title}
+  //       amount={expense.amount}
+  //       date={expense.date}
+  //       location={expense.location}
+  //       onDelete={props.onDelete}
+  //     />
+  //   );
+  // });
+  // const expensesContent =
+  //   expenseItems.length === 0 ? <p>No expenses found 😞</p> : expenseItems;
 
   return (
-    <Card className="expenses">
-      <ExpensesFilter
-        selected={filteredYear}
-        onChangeFilter={filterChangeHandler}
-      />
-      {expenseItems}
-    </Card>
+    <li>
+      <Card className="expenses">
+        <ExpensesFilter
+          selected={filteredYear}
+          onChangeFilter={filterChangeHandler}
+        />
+        <ExpensesList items={filteredExpenses} onDelete={props.onDelete} />
+      </Card>
+    </li>
   );
 };
 
