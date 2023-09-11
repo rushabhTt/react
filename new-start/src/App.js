@@ -47,11 +47,6 @@ const App = () => {
     setExpenses((prevExpenses) => {
       return [newExpense, ...prevExpenses];
     });
-    // console.log(expense);
-    // setExpenses((prevExpenses) => {
-    //   return [expense, ...prevExpenses];
-    // });
-    // console.log("bye");
   };
 
   const deleteExpenseHandler = (expenseId) => {

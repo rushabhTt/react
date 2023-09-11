@@ -17,25 +17,6 @@ const Expenses = (props) => {
     return expense.date.getFullYear().toString() === filteredYear;
   });
 
-  // ! map converts one to other basically we are converting array to react
-  // const expenseItems = filteredExpenses.map((expense) => {
-  //   console.log(expense);
-  //   return (
-  //     <ExpenseItem
-  // * The key prop is a unique identifier for an element in a list, but it is not passed down to the child component.
-  //       key={expense.id}
-  //       id={expense.id}
-  //       title={expense.title}
-  //       amount={expense.amount}
-  //       date={expense.date}
-  //       location={expense.location}
-  //       onDelete={props.onDelete}
-  //     />
-  //   );
-  // });
-  // const expensesContent =
-  //   expenseItems.length === 0 ? <p>No expenses found 😞</p> : expenseItems;
-
   return (
     <li>
       <Card className="expenses">
