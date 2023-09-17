@@ -62,10 +62,12 @@ const Login = (props) => {
     };
   }, []);
 
+  // ! object destructuring se isValid nikale aur use as eminIsValid etc. me store kiye
   const { isValid: emailIsValid } = emailState;
   const { isValid: passwordIsValid } = passwordState;
   const { isValid: collegeIsValid } = collegeState;
 
+  // ! useEffect for more efficiency here
   useEffect(() => {
     const identifier = setTimeout(() => {
       console.log("Checking form validity!");
