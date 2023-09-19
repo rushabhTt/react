@@ -15,8 +15,13 @@ const Form = () => {
             setAge('');
             setName('');
         } else {
-            alert('kindly enter valid inputs 😊');
+            const dialog = document.getElementById('alert-dialog');
+            const button = document.getElementById('close-button');
+            dialog.showModal(); // this opens the dialog
+            button.onclick = function() {
+            dialog.close(); // this closes the dialog when the button is clicked
         }
+    }
     }
     return(
         <div>
@@ -25,6 +30,10 @@ const Form = () => {
                 <FormInput label='Age' id='age' type='number' value={age} setValue={setAge}/>
                 <button type='submit'>Submit</button>
             </form>
+            <dialog id="alert-dialog">
+                <p>Kindly enter valid inputs 😊</p>
+                <button id="close-button">OK</button>
+            </dialog>
             <SubmissionList submissions={submissions}/>
         </div>
     )
