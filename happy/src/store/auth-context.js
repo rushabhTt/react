@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 
 const AuthContext = React.createContext({
   isLoggedIn: false,
+  // ! for better ide intelligence hence using the onlogout like this
   onLogout: () => {},
-  onLogin: (email, password) => {}
+  onLogin: (email, password, college) => {}
 });
 
 export const AuthContextProvider = (props) => {
