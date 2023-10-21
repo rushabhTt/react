@@ -9,13 +9,11 @@ const App = () => {
   const [cart, setCart] = useState([]);
   const [isCartVisible, setIsCartVisible] = useState(false);
 
-  // Store the list and cart in localStorage whenever it changes
   useEffect(() => {
     localStorage.setItem("list", JSON.stringify(list));
     localStorage.setItem("cart", JSON.stringify(cart));
   }, [list, cart]);
 
-  // Load the list and cart from localStorage when the component mounts
   useEffect(() => {
     const storedList = localStorage.getItem("list");
     const storedCart = localStorage.getItem("cart");
@@ -32,14 +30,15 @@ const App = () => {
   };
 
   const handleSelectItem = (item) => {
-    const newCart = [...cart]; // create a new copy of cart
+    const newCart = [...cart];
+    // findIndex index or if not present -1 dega
     const cartItemIndex = newCart.findIndex(
       (cartItem) => cartItem.key === item.key
-    ); // find index of item
+    );
     if (cartItemIndex !== -1) {
-      newCart[cartItemIndex].quantity += 1; // ensure key is a number before adding
+      newCart[cartItemIndex].quantity += 1;
     } else {
-      newCart.push({ ...item, quantity: 1 }); // ensure key is a number before setting as quantity
+      newCart.push({ ...item, quantity: 1 });
     }
     setCart(newCart);
   };
@@ -54,6 +53,7 @@ const App = () => {
       if (newCart[cartItemIndex].quantity > 1) {
         newCart[cartItemIndex].quantity--;
       } else {
+        // jaha index hain vaha se 1 element nikalega
         newCart.splice(cartItemIndex, 1);
       }
     }
@@ -82,7 +82,7 @@ const App = () => {
           className="material-icons cart-icon"
           onClick={handleToggleCartVisibility}
         >
-          shopping_cart 🛒
+          Shopping_Cart 🛒
         </button>
       </header>
       <Form handleAddItem={handleAddItem} />

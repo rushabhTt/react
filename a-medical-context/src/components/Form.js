@@ -12,9 +12,14 @@ const Form = ({ handleAddItem }) => {
         event.target.reset();
       }}
     >
-      <input type="text" name="key" placeholder="Key..." />
-      <input type="text" name="description" placeholder="Description..." />
-      <input type="number" name="price" placeholder="Price..." />
+      <input type="text" name="key" placeholder="Key..." required />
+      <input
+        type="text"
+        name="description"
+        placeholder="Description..."
+        required
+      />
+      <input type="number" name="price" placeholder="Price..." required />
       <button type="submit">Add</button>
     </form>
   );

@@ -19,7 +19,7 @@ const Cart = ({
           </li>
         ))}
       </ul>
-      <p>Total price: {calculateTotalPrice()}</p>
+      <p>Total price: 💵{calculateTotalPrice()}</p>
     </div>
   );
 };
