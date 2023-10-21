@@ -96,7 +96,6 @@ const App = () => {
           calculateTotalPrice={calculateTotalPrice}
         />
       )}
-      <div className="overlay" onClick={handleToggleCartVisibility}></div>
     </div>
   );
 };

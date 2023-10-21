@@ -9,6 +9,7 @@ const Cart = ({
     <div className="cart-container">
       <h2>Cart</h2>
       <button onClick={handleEmptyCart}>Empty whole Cart🗑️</button>
+      <p>Total price: 💵{calculateTotalPrice()}</p>
       <ul>
         {cart.map((item, index) => (
           <li key={index}>
@@ -19,7 +20,6 @@ const Cart = ({
           </li>
         ))}
       </ul>
-      <p>Total price: 💵{calculateTotalPrice()}</p>
     </div>
   );
 };
