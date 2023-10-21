@@ -1,10 +1,15 @@
-const Cart = ({
-  cart,
-  handleRemoveItem,
-  handleAddItem,
-  handleEmptyCart,
-  calculateTotalPrice,
-}) => {
+import React, { useContext } from "react";
+import { CartContext } from "../context/CartContext";
+
+const Cart = () => {
+  const {
+    cart,
+    handleRemoveItem,
+    handleAddItem,
+    handleEmptyCart,
+    calculateTotalPrice,
+  } = useContext(CartContext);
+
   return (
     <div className="cart-container">
       <h2>Cart</h2>
