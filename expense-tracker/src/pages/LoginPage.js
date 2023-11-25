@@ -30,6 +30,7 @@ function LoginPage() {
         throw new Error(data.error.message || "Login failed");
       }
       console.log("Login Response:", data);
+      localStorage.setItem("idToken", data.idToken);
       alert("successfully signed in 🎉");
 
       setEmail("");
