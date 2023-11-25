@@ -9,14 +9,20 @@ function ExpenseForm() {
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
-    // Fetch expenses from the backend when the component mounts
     const fetchExpenses = async () => {
       try {
         const response = await axios.get(
-          "https://your-backend-api.com/get-expenses"
+          "https://expensetracker-12365-default-rtdb.firebaseio.com/expense.json"
         );
-        // Assuming the response.data is an array of expenses
-        setExpenses(response.data);
+        // Assuming the response.data is an object with expense items
+        const expensesData = response.data;
+        // * Agar expensesData ek object hai, toh isse ek array mein convert karo
+        const expensesArray = Array.isArray(expensesData)
+          ? expensesData
+          : expensesData
+          ? Object.values(expensesData)
+          : [];
+        setExpenses(expensesArray);
       } catch (error) {
         console.error("Error fetching expenses:", error);
       }
@@ -29,9 +35,8 @@ function ExpenseForm() {
     console.log(amount, description, category);
     try {
       setSubmitting(true);
-      // You can replace the following URL with your backend endpoint to handle expense submissions
       const response = await axios.post(
-        "https://your-backend-api.com/submit-expense",
+        "https://expensetracker-12365-default-rtdb.firebaseio.com/expense.json",
         {
           amount: parseFloat(amount),
           description: description,
@@ -39,9 +44,9 @@ function ExpenseForm() {
         }
       );
       console.log("Expense submitted successfully:", response.data);
-      // Update the list of expenses after successful submission
+
       setExpenses((prevExpenses) => [...prevExpenses, response.data]);
-      // Clear the form after successful submission
+
       setAmount("");
       setDescription("");
       setCategory("");
@@ -109,12 +114,13 @@ function ExpenseForm() {
       <div className="mt-8">
         <h2 className="text-2xl font-semibold mb-4">Expenses</h2>
         <ul>
-          {expenses.map((expense) => (
-            <li key={expense.id}>
-              <strong>{expense.category}</strong>: ${expense.amount} -{" "}
-              {expense.description}
-            </li>
-          ))}
+          {expenses &&
+            expenses.map((expense) => (
+              <li key={expense.id}>
+                <strong>{expense.category}</strong>: ₹{expense.amount} -{" "}
+                {expense.description}
+              </li>
+            ))}
         </ul>
       </div>
     </div>
