@@ -4,6 +4,8 @@ import axios from "axios";
 
 function DummyPage() {
   const [isProfileComplete, setIsProfileComplete] = useState(false);
+  const [verificationSent, setVerificationSent] = useState(false);
+  const [checkingProfile, setCheckingProfile] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -17,18 +19,45 @@ function DummyPage() {
         );
         console.log(response.data, isProfileComplete);
         const userData = response.data.users[0];
-        const profileComplete = !! userData;
+        const profileComplete = !!userData;
         setIsProfileComplete(profileComplete);
       } catch (error) {
         console.error("Error fetching user data:", error);
+      } finally {
+        setCheckingProfile(false);
       }
     };
     fetchData();
-  }, []); 
+  }, []);
+
+  const sendVerificationEmail = async () => {
+    try {
+      const idToken = localStorage.getItem("idToken");
+      await axios.post(
+        `https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=AIzaSyD3D8fP7LX24FGdE7S1ivZZcvu98Ikt2pQ`,
+        {
+          requestType: "VERIFY_EMAIL",
+          idToken: idToken,
+        }
+      );
+      setVerificationSent(true);
+    } catch (error) {
+      console.error("Error sending verification email:", error.response?.data);
+      if (error.response?.data?.error?.message === "INVALID_ID_TOKEN") {
+        alert("Your session has expired. Please sign in again.");
+      } else if (error.response?.data?.error?.message === "USER_NOT_FOUND") {
+        alert("User not found. Please sign up first.");
+      } else {
+        alert("An error occurred while sending the verification email.");
+      }
+    }
+  };
 
   return (
     <div className="text-right">
-      {isProfileComplete ? (
+      {checkingProfile ? (
+        "Checking your profile..."
+      ) : isProfileComplete ? (
         "Your profile is complete."
       ) : (
         <>
@@ -44,6 +73,19 @@ function DummyPage() {
           </Link>
         </>
       )}
+      <div>
+        {verificationSent ? (
+          <span>Verification email sent. Check your email to verify.</span>
+        ) : (
+          <button
+            type="button"
+            class="focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900"
+            onClick={sendVerificationEmail}
+          >
+            Verify Email Address
+          </button>
+        )}
+      </div>
     </div>
   );
 }
