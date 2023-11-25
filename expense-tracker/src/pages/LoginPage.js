@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 function LoginPage() {
   const [email, setEmail] = useState("");
@@ -8,61 +9,43 @@ function LoginPage() {
   const [isLoginForm, setIsLoginForm] = useState(true);
   const navigate = useNavigate();
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+   const handleSubmit = async (event) => {
+     event.preventDefault();
+     try {
+       if (isLoginForm) {
+         // Handle login form submission
+         const response = await axios.post(
+           `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyD3D8fP7LX24FGdE7S1ivZZcvu98Ikt2pQ`,
+           {
+             email: email,
+             password: password,
+             returnSecureToken: true,
+           }
+         );
+         localStorage.setItem("idToken", response.data.idToken);
+         alert("Successfully signed in 🎉");
 
-    try {
-      if (isLoginForm) {
-        // Handle login form submission
-        const response = await fetch(
-          `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyD3D8fP7LX24FGdE7S1ivZZcvu98Ikt2pQ`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              email: email,
-              password: password,
-              returnSecureToken: true,
-            }),
-          }
-        );
-        const data = await response.json();
-        if (!response.ok) {
-          throw new Error(data.error.message || "Login failed");
-        }
-        localStorage.setItem("idToken", data.idToken);
-        alert("Successfully signed in 🎉");
-
-        setEmail("");
-        setPassword("");
-
-        navigate("/dummy");
-      } else {
-        // Handle password reset form submission
-        await fetch(
-          `https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=AIzaSyD3D8fP7LX24FGdE7S1ivZZcvu98Ikt2pQ`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              email: resetEmail,
-              requestType: "PASSWORD_RESET",
-            }),
-          }
-        );
-        alert(
-          "Password reset email sent. Check your email to reset your password."
-        );
-        setResetEmail("");
-      }
-    } catch (error) {
-      console.error("Error:", error.message);
-    }
-  };
+         setEmail("");
+         setPassword("");
+         navigate("/dummy");
+       } else {
+         // Handle password reset form submission
+         await axios.post(
+           `https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=AIzaSyD3D8fP7LX24FGdE7S1ivZZcvu98Ikt2pQ`,
+           {
+             email: resetEmail,
+             requestType: "PASSWORD_RESET",
+           }
+         );
+         alert(
+           "Password reset email sent. Check your email to reset your password."
+         );
+         setResetEmail("");
+       }
+     } catch (error) {
+       console.error("Error:", error.message);
+     }
+   };
 
   const toggleForm = () => {
     // Switch between login and password reset forms

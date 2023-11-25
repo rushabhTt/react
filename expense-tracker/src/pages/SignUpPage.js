@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 function SignUpPage() {
   const [email, setEmail] = useState("");
@@ -15,24 +16,17 @@ function SignUpPage() {
     }
 
     try {
-      const response = await fetch(
+      const response = await axios.post(
         `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyD3D8fP7LX24FGdE7S1ivZZcvu98Ikt2pQ`,
         {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            email: email,
-            password: password,
-            returnSecureToken: true,
-          }),
+          email: email,
+          password: password,
+          returnSecureToken: true,
         }
       );
 
-      const data = await response.json();
-      console.log("Signup Response:", data);
-      alert("successfully signed up 🎉");
+      console.log("Signup Response:", response.data);
+      alert("Successfully signed up 🎉");
 
       setEmail("");
       setPassword("");
@@ -56,6 +50,7 @@ function SignUpPage() {
           </div>
           {/* Right column container with form */}
           <div className="md:w-8/12 lg:ml-6 lg:w-5/12">
+            <h1 className="text-2xl font-semibold mb-6">Sign Up</h1>
             <form onSubmit={handleSignUp}>
               <div className="mb-6">
                 <input
