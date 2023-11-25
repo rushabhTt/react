@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import ExpenseForm from "../components/ExpenseForm";
 
 function DummyPage() {
   const [isProfileComplete, setIsProfileComplete] = useState(false);
   const [verificationSent, setVerificationSent] = useState(false);
   const [checkingProfile, setCheckingProfile] = useState(true);
+  const [emailVerified, setEmailVerified] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -18,10 +20,12 @@ function DummyPage() {
             idToken: idToken,
           }
         );
-        console.log(response.data, isProfileComplete);
+        console.log(response.data);
         const userData = response.data.users[0];
         const profileComplete = !!userData;
         setIsProfileComplete(profileComplete);
+        setEmailVerified((prev) => userData.emailVerified);
+        console.log(userData.emailVerified);
       } catch (error) {
         console.error("Error fetching user data:", error);
       } finally {
@@ -60,48 +64,53 @@ function DummyPage() {
   };
 
   return (
-    <div className="text-right">
-      <div>
-        <button
-          type="button"
-          className="text-blue-500 underline"
-          onClick={handleLogout}
-        >
-          Logout
-        </button>
-      </div>
-      {checkingProfile ? (
-        "Checking your profile..."
-      ) : isProfileComplete ? (
-        "Your profile is complete."
-      ) : (
-        <>
-          Your profile is incomplete:
-          <Link
-            to="/profile"
-            className={`text-blue-500 ${
-              isProfileComplete ? "line-through" : "underline"
-            }`}
-            onClick={(e) => !isProfileComplete && e.preventDefault()}
-          >
-            Complete your profile!
-          </Link>
-        </>
-      )}
-      <div>
-        {verificationSent ? (
-          <span>Verification email sent. Check your email to verify.</span>
-        ) : (
+    <>
+      <div className="text-right">
+        <div>
           <button
             type="button"
-            class="focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900"
-            onClick={sendVerificationEmail}
+            className="text-blue-500 underline"
+            onClick={handleLogout}
           >
-            Verify Email Address
+            Logout
           </button>
+        </div>
+        {checkingProfile ? (
+          "Checking your profile..."
+        ) : isProfileComplete ? (
+          "Your profile is complete."
+        ) : (
+          <>
+            Your profile is incomplete:
+            <Link
+              to="/profile"
+              className={`text-blue-500 ${
+                isProfileComplete ? "line-through" : "underline"
+              }`}
+              onClick={(e) => !isProfileComplete && e.preventDefault()}
+            >
+              Complete your profile!
+            </Link>
+          </>
+        )}
+        {!emailVerified && (
+          <div>
+            {verificationSent ? (
+              <span>Verification email sent. Check your email to verify.</span>
+            ) : (
+              <button
+                type="button"
+                className="focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900"
+                onClick={sendVerificationEmail}
+              >
+                Verify Email Address
+              </button>
+            )}
+          </div>
         )}
       </div>
-    </div>
+      <ExpenseForm />
+    </>
   );
 }
 
