@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 function DummyPage() {
   const [isProfileComplete, setIsProfileComplete] = useState(false);
   const [verificationSent, setVerificationSent] = useState(false);
   const [checkingProfile, setCheckingProfile] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -53,8 +54,22 @@ function DummyPage() {
     }
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem("idToken");
+    navigate("/login");
+  };
+
   return (
     <div className="text-right">
+      <div>
+        <button
+          type="button"
+          className="text-blue-500 underline"
+          onClick={handleLogout}
+        >
+          Logout
+        </button>
+      </div>
       {checkingProfile ? (
         "Checking your profile..."
       ) : isProfileComplete ? (
