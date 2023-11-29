@@ -1,12 +1,13 @@
 import { useSelector, useDispatch } from "react-redux";
 
 import classes from "./Counter.module.css";
-import { increase, decrease, toggle } from "../store/index";
+import { increase, decrease, toggle } from "../store/counter";
 
 const Counter = () => {
   const dispatch = useDispatch();
-  const counter = useSelector((state) => state.counter);
-  const showCounter = useSelector((state) => state.showCounter);
+ const counter = useSelector((state) => state.counter.counter);
+ const showCounter = useSelector((state) => state.counter.showCounter);
+
 
   //* “counter/” in the action type “counter/incrementBy5” is derived from the name property you set when creating the slice with createSlice
   const incrementHandler = () => {

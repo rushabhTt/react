@@ -1,7 +1,7 @@
 import { useSelector, useDispatch } from "react-redux";
 
 import classes from "./Header.module.css";
-import { logout } from "../store/index";
+import { logout } from "../store/auth";
 
 const Header = () => {
   const dispatch = useDispatch();
