@@ -1,57 +1,65 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+
+import { login } from "../store/auth";
 
 function LoginPage() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [resetEmail, setResetEmail] = useState("");
   const [isLoginForm, setIsLoginForm] = useState(true);
-  const navigate = useNavigate();
 
-   const handleSubmit = async (event) => {
-     event.preventDefault();
-     try {
-       if (isLoginForm) {
-         // Handle login form submission
-         const response = await axios.post(
-           `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyD3D8fP7LX24FGdE7S1ivZZcvu98Ikt2pQ`,
-           {
-             email: email,
-             password: password,
-             returnSecureToken: true,
-           }
-         );
-         localStorage.setItem("idToken", response.data.idToken);
-         alert("Successfully signed in 🎉");
+  const authData = useSelector((state) => state.auth);
 
-         setEmail("");
-         setPassword("");
-         navigate("/dummy");
-       } else {
-         // Handle password reset form submission
-         await axios.post(
-           `https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=AIzaSyD3D8fP7LX24FGdE7S1ivZZcvu98Ikt2pQ`,
-           {
-             email: resetEmail,
-             requestType: "PASSWORD_RESET",
-           }
-         );
-         alert(
-           "Password reset email sent. Check your email to reset your password."
-         );
-         setResetEmail("");
-       }
-     } catch (error) {
-       console.error("Error:", error.message);
-     }
-   };
-
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    try {
+      if (isLoginForm) {
+        // Handle login form submission
+        const response = await axios.post(
+          `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyD3D8fP7LX24FGdE7S1ivZZcvu98Ikt2pQ`,
+          {
+            email: email,
+            password: password,
+            returnSecureToken: true,
+          }
+        );
+        // localStorage.setItem("idToken", response.data.idToken);
+        dispatch(
+          login({
+            token: response.data.idToken,
+            userId: response.data.localId,
+          })
+        );
+        setEmail("");
+        setPassword("");
+        navigate("/dummy");
+      } else {
+        // Handle password reset form submission
+        await axios.post(
+          `https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=AIzaSyD3D8fP7LX24FGdE7S1ivZZcvu98Ikt2pQ`,
+          {
+            email: resetEmail,
+            requestType: "PASSWORD_RESET",
+          }
+        );
+        alert(
+          "Password reset email sent. Check your email to reset your password."
+        );
+        setResetEmail("");
+      }
+    } catch (error) {
+      console.error("Error:", error.message);
+    }
+  };
   const toggleForm = () => {
     // Switch between login and password reset forms
     setIsLoginForm(!isLoginForm);
   };
-
   return (
     <div className="min-h-screen bg-gray-100 py-6 flex flex-col justify-center sm:py-12">
       <div className="relative py-3 sm:max-w-xl sm:mx-auto">
@@ -109,7 +117,7 @@ function LoginPage() {
                         type="submit"
                         className="bg-blue-500 text-white rounded-md px-2 py-1"
                       >
-                        Submit
+                        Login 😎
                       </button>
                     </div>
                   </div>
@@ -151,7 +159,8 @@ function LoginPage() {
                 <>
                   <span>Don't have an account?</span>
                   <Link to="/signup" className="text-blue-500 hover:underline">
-                    {" "}Sign up
+                    {" "}
+                    Sign up
                   </Link>
                   <span className="ml-1">|</span>
                   <button

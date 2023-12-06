@@ -1,14 +1,16 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { useSelector } from "react-redux";
 
 function ProfilePage() {
+  const idToken = useSelector((state) => state.auth.token);
   const [fullName, setFullName] = useState("");
   const [profilePhotoURL, setProfilePhotoURL] = useState("");
 
   const submitHandler = async (event) => {
     event.preventDefault();
 
-    const idToken = localStorage.getItem("idToken");
+    // const idToken = localStorage.getItem("idToken");
     const updateProfileEndpoint = `https://identitytoolkit.googleapis.com/v1/accounts:update?key=AIzaSyD3D8fP7LX24FGdE7S1ivZZcvu98Ikt2pQ`;
 
     try {

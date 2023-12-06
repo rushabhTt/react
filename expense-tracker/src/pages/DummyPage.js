@@ -1,18 +1,33 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+
 import ExpenseForm from "../components/ExpenseForm";
+import { logout } from "../store/auth";
 
 function DummyPage() {
-  const [isProfileComplete, setIsProfileComplete] = useState(false);
+  const dispatch = useDispatch();
+  const idToken = localStorage.getItem("idToken") || "";
+  const tokenFromState = useSelector((state) => state.auth.token);
+
+  const [isProfileComplete, setIsProfileComplete] = useState(
+    JSON.parse(localStorage.getItem("isProfileComplete")) || false
+  );
   const [verificationSent, setVerificationSent] = useState(false);
   const [checkingProfile, setCheckingProfile] = useState(true);
-  const [emailVerified, setEmailVerified] = useState(false);
+  const [emailVerified, setEmailVerified] = useState(
+    JSON.parse(localStorage.getItem("emailVerified")) || false
+  );
+
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
+        if (tokenFromState) {
+          localStorage.setItem("idToken", tokenFromState);
+        }
         const idToken = localStorage.getItem("idToken");
         const response = await axios.post(
           `https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyD3D8fP7LX24FGdE7S1ivZZcvu98Ikt2pQ`,
@@ -20,12 +35,12 @@ function DummyPage() {
             idToken: idToken,
           }
         );
-        console.log(response.data);
+        // console.log(response.data);
         const userData = response.data.users[0];
         const profileComplete = !!userData;
         setIsProfileComplete(profileComplete);
         setEmailVerified((prev) => userData.emailVerified);
-        console.log(userData.emailVerified);
+        // console.log(userData.emailVerified);
       } catch (error) {
         console.error("Error fetching user data:", error);
       } finally {
@@ -35,9 +50,17 @@ function DummyPage() {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    localStorage.setItem(
+      "isProfileComplete",
+      JSON.stringify(isProfileComplete)
+    );
+    localStorage.setItem("emailVerified", JSON.stringify(emailVerified));
+  }, [isProfileComplete, emailVerified]);
+
   const sendVerificationEmail = async () => {
     try {
-      const idToken = localStorage.getItem("idToken");
+      // const idToken = localStorage.getItem("idToken");
       await axios.post(
         `https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=AIzaSyD3D8fP7LX24FGdE7S1ivZZcvu98Ikt2pQ`,
         {
@@ -59,7 +82,7 @@ function DummyPage() {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("idToken");
+    dispatch(logout());
     navigate("/login");
   };
 
