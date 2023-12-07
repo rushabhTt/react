@@ -9,9 +9,6 @@ function ExpenseForm() {
   const dispatch = useDispatch();
   // ^ pahle useState se manage kr rhe the ab redux se expenses ko
   const expenses = useSelector((state) => state.expenses.expenses);
-  const showPremiumButton = useSelector(
-    (state) => state.expenses.showPremiumButton
-  );
 
   const [amount, setAmount] = useState("");
   const [description, setDescription] = useState("");
@@ -87,7 +84,7 @@ function ExpenseForm() {
 
       const updatedExpenses = expenses.filter((item) => item.id !== expense.id);
       dispatch(setExpenses(updatedExpenses));
-      
+
       console.log("Expense successfully deleted");
       dispatch(removeExpense(expense.id));
     } catch (error) {
@@ -107,67 +104,68 @@ function ExpenseForm() {
     }
   };
 
-  const activatePremium = () => {};
-
   return (
-    <div className="max-w-2xl mx-auto p-6 bg-white rounded-md shadow-md">
-      {showPremiumButton && (
-        <button onClick={activatePremium}>Activate Premium</button>
-      )}
-      <h2 className="text-2xl font-semibold mb-4">Expense Form</h2>
-      <form onSubmit={handleSubmit}>
-        <div className="mb-4">
-          <label htmlFor="amount" className="block text-gray-700">
-            Amount:
-          </label>
-          <input
-            type="number"
-            id="amount"
-            value={amount}
-            onChange={(e) => setAmount(e.target.value)}
-            className="mt-1 p-3 w-full border rounded-md"
-            required
-          />
-        </div>
-        <div className="mb-4">
-          <label htmlFor="description" className="block text-gray-700">
-            Description:
-          </label>
-          <input
-            type="text"
-            id="description"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            className="mt-1 p-3 w-full border rounded-md"
-            required
-          />
-        </div>
-        <div className="mb-4">
-          <label htmlFor="category" className="block text-gray-700">
-            Category:
-          </label>
-          <select
-            id="category"
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
-            className="mt-1 p-3 w-full border rounded-md"
-            required
+    <div>
+      <div className="max-w-2xl mx-auto p-6 bg-white rounded-md shadow-md">
+        <h2 className="text-2xl font-semibold mb-4">Expense Form</h2>
+        <form onSubmit={handleSubmit}>
+          <div className="mb-4">
+            <label htmlFor="amount" className="block text-gray-700">
+              Amount:
+            </label>
+            <input
+              type="number"
+              id="amount"
+              value={amount}
+              onChange={(e) => setAmount(e.target.value)}
+              className="mt-1 p-3 w-full border rounded-md"
+              required
+            />
+          </div>
+          <div className="mb-4">
+            <label htmlFor="description" className="block text-gray-700">
+              Description:
+            </label>
+            <input
+              type="text"
+              id="description"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              className="mt-1 p-3 w-full border rounded-md"
+              required
+            />
+          </div>
+          <div className="mb-4">
+            <label htmlFor="category" className="block text-gray-700">
+              Category:
+            </label>
+            <select
+              id="category"
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+              className="mt-1 p-3 w-full border rounded-md"
+              required
+            >
+              <option value="">Select Category</option>
+              <option value="Food">Food</option>
+              <option value="Petrol">Petrol</option>
+              <option value="Salary">Salary</option>
+            </select>
+          </div>
+          <button
+            type="submit"
+            className="w-full bg-blue-500 text-white p-3 rounded-md"
+            disabled={submitting}
           >
-            <option value="">Select Category</option>
-            <option value="Food">Food</option>
-            <option value="Petrol">Petrol</option>
-            <option value="Salary">Salary</option>
-          </select>
-        </div>
-        <button
-          type="submit"
-          className="w-full bg-blue-500 text-white p-3 rounded-md"
-          disabled={submitting}
-        >
-          Submit Expense
-        </button>
-      </form>
-      <Table expenses={expenses} onDelete={handleDelete} onEdit={handleEdit} />
+            Submit Expense
+          </button>
+        </form>
+        <Table
+          expenses={expenses}
+          onDelete={handleDelete}
+          onEdit={handleEdit}
+        />
+      </div>
     </div>
   );
 }

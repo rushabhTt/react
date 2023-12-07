@@ -4,10 +4,15 @@ import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 
 import ExpenseForm from "../components/ExpenseForm";
+import PremiumNav from "../components/PremiumNav";
 import { logout } from "../store/auth";
 
 function DummyPage() {
   const dispatch = useDispatch();
+  const showPremiumButton = useSelector(
+    (state) => state.expenses.showPremiumButton
+  );
+
   const idToken = localStorage.getItem("idToken") || "";
   const tokenFromState = useSelector((state) => state.auth.token);
 
@@ -132,6 +137,7 @@ function DummyPage() {
           </div>
         )}
       </div>
+      {showPremiumButton && <PremiumNav onLogoutClick={handleLogout} />}
       <ExpenseForm />
     </>
   );

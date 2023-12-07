@@ -14,7 +14,7 @@ const expensesSlice = createSlice({
     addExpense(state, action) {
       state.expenses.push(action.payload);
       state.total += action.payload.amount;
-      if (state.total > 1000) {
+      if (state.total > 10000) {
         state.showPremiumButton = true;
       }
     },
@@ -26,7 +26,7 @@ const expensesSlice = createSlice({
         (total, expense) => total + expense.amount,
         0
       );
-      if (state.total <= 1000) {
+      if (state.total <= 10000) {
         state.showPremiumButton = false;
       }
     },
@@ -36,13 +36,28 @@ const expensesSlice = createSlice({
         (total, expense) => total + expense.amount,
         0
       );
-      if (state.total > 1000) {
+      if (state.total > 10000) {
         state.showPremiumButton = true;
       }
+    },
+    downloadCSV(state) {
+      const csvContent =
+        "data:text/csv;charset=utf-8," +
+        state.expenses
+          .map((expense) => Object.values(expense).join(","))
+          .join("\n");
+
+      const encodedUri = encodeURI(csvContent);
+      const link = document.createElement("a");
+      link.setAttribute("href", encodedUri);
+      link.setAttribute("download", "expenses.csv");
+      document.body.appendChild(link);
+      link.click();
     },
   },
 });
 
-export const { addExpense, removeExpense, setExpenses } = expensesSlice.actions;
+export const { addExpense, removeExpense, setExpenses, downloadCSV } =
+  expensesSlice.actions;
 
 export default expensesSlice;
