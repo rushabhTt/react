@@ -58,11 +58,15 @@ function ExpenseForm() {
         dispatch(setExpenses(updatedExpenses));
         setEditingExpense(null);
       } else {
-        await axios.post(
+        const response = await axios.post(
           "https://expensetracker-12365-default-rtdb.firebaseio.com/expense.json",
           newData
         );
-        dispatch(setExpenses([...expenses, newData]));
+        const newExpenseWithId = {
+          id: response.data.name,
+          ...newData,
+        };
+        dispatch(setExpenses([...expenses, newExpenseWithId]));
       }
       setAmount("");
       setDescription("");
@@ -84,9 +88,9 @@ function ExpenseForm() {
 
       const updatedExpenses = expenses.filter((item) => item.id !== expense.id);
       dispatch(setExpenses(updatedExpenses));
+      dispatch(removeExpense(expense.id));
 
       console.log("Expense successfully deleted");
-      dispatch(removeExpense(expense.id));
     } catch (error) {
       console.error("Error deleting expense:", error);
     }

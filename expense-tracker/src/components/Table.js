@@ -63,21 +63,3 @@ function Table({ expenses, onDelete, onEdit }) {
 }
 
 export default Table;
-
-// export const downloadCSV = () => {
-//   const csvRows = [];
-//   const headers = ["Category", "Amount", "Description"];
-//   csvRows.push(headers.join(","));
-
-//   for (const row of expenses) {
-//     csvRows.push(`${row.category},${row.amount},${row.description}`);
-//   }
-
-//   const csvString = csvRows.join("\n");
-//   const blob = new Blob([csvString], { type: "text/csv" });
-//   const url = URL.createObjectURL(blob);
-//   const link = document.createElement("a");
-//   link.download = "expenses.csv";
-//   link.href = url;
-//   link.click();
-// };
